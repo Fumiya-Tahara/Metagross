@@ -1,6 +1,8 @@
 package chap3_7
 
-import "math"
+import (
+	"math"
+)
 
 // カエルの足場問題
 func Frog(numbers []int) int {
@@ -28,4 +30,27 @@ func Frog(numbers []int) int {
 	}
 
 	return dp[len(numbers)-1]
+}
+
+func Stairs(n int) int {
+	dp := make([]int, n+1)
+
+	for i := 0; i < n+1; i++ {
+		if i == 0 {
+			dp[i] = 0
+			continue
+		}
+		if i == 1 {
+			dp[i] = 1
+			continue
+		}
+		if i == 2 {
+			dp[i] = 2
+			continue
+		}
+
+		dp[i] = dp[i-1] + dp[i-2]
+	}
+
+	return dp[n]
 }
