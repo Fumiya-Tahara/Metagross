@@ -1,11 +1,22 @@
-let h = [8, 6, 9, 2, 1];
-let a = [0, 2];
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-for (let n = 2; n < 5; n++) {
-  a[n] = Math.min(
-    a[n - 1] + Math.abs(h[n - 1] - h[n]),
-    a[n - 2] + Math.abs(h[n - 2] - h[n])
-  );
-}
+readline.question('足場の高さを5つ、カンマ区切りで入力してください: ', input => {
+  let h = input.split(',').map(Number);
+  let dp = new Array(h.length).fill(Infinity);
 
-console.log(a[4]);
+  dp[0] = 0;
+
+  for (let i = 1; i < h.length; i++) {
+    if (i == 1) {
+      dp[i] = Math.abs(h[i] - h[i-1]);
+    } else {
+      dp[i] = Math.min(dp[i-1] + Math.abs(h[i] - h[i-1]), dp[i-2] + Math.abs(h[i] - h[i-2]));
+    }
+  }
+
+  console.log(dp[h.length - 1]);
+  readline.close();
+});
