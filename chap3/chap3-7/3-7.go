@@ -32,6 +32,7 @@ func Frog(numbers []int) int {
 	return dp[len(numbers)-1]
 }
 
+// 階段の登り方問題
 func Stairs(n int) int {
 	dp := make([]int, n+1)
 
@@ -53,4 +54,29 @@ func Stairs(n int) int {
 	}
 
 	return dp[n]
+}
+
+// ナップザック問題
+func Knapsack(n, w int, items [][]int) int {
+	dp := make([][]int, n+1)
+	dp[0] = make([]int, w+1)
+
+	for i := 1; i <= n; i++ {
+		dp[i] = make([]int, w+1)
+		for j := 1; j <= w; j++ {
+			if j < items[i-1][0] {
+				dp[i][j] = dp[i-1][j]
+				continue
+			}
+			isSelectedVal := dp[i-1][j-items[i-1][0]] + items[i-1][1]
+			isNotSelectedVal := dp[i-1][j]
+			if isSelectedVal > isNotSelectedVal {
+				dp[i][j] = isSelectedVal
+			} else {
+				dp[i][j] = isNotSelectedVal
+			}
+		}
+	}
+
+	return dp[n][w]
 }
