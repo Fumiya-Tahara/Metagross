@@ -37,7 +37,7 @@ const readline = require('readline').createInterface({
   output: process.stdout
 });
 
-readline.question('足場の高さを5つ、カンマ区切りで入力してください: ', input => {
+readline.question('足場の高さを5つ、カンマ区切りで入力: ', input => {
   let h = input.split(',').map(Number);
   let dp = new Array(h.length).fill(Infinity);
 
@@ -61,7 +61,7 @@ const readline = require('readline').createInterface({
   output: process.stdout
 });
 
-readline.question('階段の段数を入力してください: ', input => {
+readline.question('階段の段数を入力: ', input => {
   let N = Number(input);
   let dp = new Array(N + 1).fill(0);
 
@@ -165,7 +165,7 @@ rl.question('カードの数Nと目標の合計Sをスペース区切りで入�
 
   const readCards = (index = 0) => {
     if (index < N) {
-      rl.question(`カード${index+1}の数値を入力してください: `, card => {
+      rl.question(`カード${index+1}の数値を入力: `, card => {
         cards[index] = Number(card);
         readCards(index + 1);
       });
@@ -195,13 +195,13 @@ let rl = readline.createInterface({
   output: process.stdout
 });
 
-rl.question('夏休みの日数Nを入力してください: ', input => {
+rl.question('夏休みの日数Nを入力: ', input => {
   let N = Number(input);
   let powerUps = new Array(N);
 
   const readDays = (index = 0) => {//再帰関数
     if (index < N) {
-      rl.question(`日${index+1}に勉強すると実力がいくつ上がるかを入力してください: `, powerUp => {
+      rl.question(`日${index+1}に勉強すると実力がいくつ上がるかを入力: `, powerUp => {
         powerUps[index] = Number(powerUp);
         readDays(index + 1);//再帰関数
       });
