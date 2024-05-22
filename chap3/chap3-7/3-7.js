@@ -38,7 +38,7 @@ const readline = require('readline').createInterface({
 });
 
 readline.question('足場の高さを5つ、カンマ区切りで入力: ', input => {
-  let h = input.split(',').map(Number);
+  let h = input.split(',').map(Number); 
   let dp = new Array(h.length).fill(Infinity);
 
   dp[0] = 0;
@@ -159,6 +159,47 @@ let rl = readline.createInterface({
   output: process.stdout
 });
 
+let inputIndex = 0;
+let N, S;
+let cards;
+
+console.log('カードの数Nと目標の合計Sをスペース区切りで入力: ');
+
+rl.on('line', (input) => {
+  if (inputIndex === 0) {
+    [N, S] = input.split(' ').map(Number);
+    cards = new Array(N);//[2,5,9]
+    console.log(`カード1の数値を入力: `);
+  } else if (inputIndex <= N) {
+    cards[inputIndex - 1] = Number(input);
+    if (inputIndex < N) {
+      console.log(`カード${inputIndex + 1}の数値を入力: `);
+    } else {
+      let dp = new Array(S + 1).fill(false);
+      dp[0] = true;
+
+      for (let i = 0; i < N; i++) {//カードの数だけ繰り返す
+        for (let j = S; j >= cards[i]; j--) {//目標の合計からカードの数値を引いた数だけ繰り返す
+					console.log(dp[j], dp[j - cards[i]]);
+          dp[j] = dp[j] || dp[j - cards[i]];//カードの数値を引いた数のdpがtrueならtrue
+        }
+      }
+
+      console.log(dp[S] ? 'Yes' : 'No');//目標の合計がtrueならYes
+      rl.close();
+    }
+  }
+  inputIndex++;
+});
+
+//再帰関数
+const readline = require('readline');
+
+let rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
 rl.question('カードの数Nと目標の合計Sをスペース区切りで入力: ', input => {
   let [N, S] = input.split(' ').map(Number);
   let cards = new Array(N);
@@ -187,7 +228,41 @@ rl.question('カードの数Nと目標の合計Sをスペース区切りで入�
   readCards();
 });
 
-//3.7.6
+//3.7.6　再帰
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+let N;//夏休みの日数
+let A = [];//日々の実力アップ
+let dp1 = [];//勉強した場合
+let dp2 = [];//しなかった場合
+
+rl.question('夏休みの日数Nを入力: ', input => {
+  N = Number(input);
+  dp1[0] = 0;
+  dp2[0] = 0;
+  Power(1);
+});
+
+function Power(i) {
+  if (i <= N) {
+    rl.question(`${i}日目に勉強すると実力がいくつ上がるかを入力: `, powerUp => {
+      A[i] = Number(powerUp);
+      dp1[i] = dp2[i - 1] + A[i];
+      dp2[i] = Math.max(dp1[i - 1], dp2[i - 1]);
+      Power(i + 1);
+    });
+  } else {
+    console.log(Math.max(dp1[N], dp2[N]));
+    rl.close();
+  }
+}
+
+//Taro
 const readline = require('readline');
 
 let rl = readline.createInterface({
@@ -195,30 +270,62 @@ let rl = readline.createInterface({
   output: process.stdout
 });
 
-rl.question('夏休みの日数Nを入力: ', input => {
-  let N = Number(input);
-  let powerUps = new Array(N);
+let i = 0;
+let N;
+let powerUps;
 
-  const readDays = (index = 0) => {//再帰関数
-    if (index < N) {
-      rl.question(`日${index+1}に勉強すると実力がいくつ上がるかを入力: `, powerUp => {
-        powerUps[index] = Number(powerUp);
-        readDays(index + 1);//再帰関数
-      });
+console.log('夏休みの日数Nを入力: ');
+
+rl.on('line', (input) => {
+  if (i === 0) {
+    N = Number(input);
+    powerUps = new Array(N);
+  } else if (i <= N) {
+    powerUps[i - 1] = Number(input);
+	}
+
+    if (i < N) {
+      console.log(`${i + 1}日目に勉強すると実力がいくつ上がるかを入力: `);
     } else {
       let dp = new Array(N + 1).fill(0);
+      dp[1] = powerUps[0];
 
-      for (let i = 0; i < N; i++) {
-        dp[i + 1] = Math.max(dp[i + 1], dp[i]);
-        if (i + 2 <= N) {
-          dp[i + 2] = Math.max(dp[i + 2], dp[i] + powerUps[i]);
+      for (let i = 2; i < N + 1; i++) {
+        let suruhi = dp[i - 2] + powerUps[i - 1];
+        let shinaihi = dp[i - 1];
+
+        if (suruhi > shinaihi) {
+          dp[i] = suruhi;
+        } else {
+          dp[i] = shinaihi;
         }
       }
 
-      console.log(dp[N]); // 夏休みの間に実力がいくつ上がるかの最大値を出力
+      console.log(dp[N]);
       rl.close();
     }
-  };
+		i++;
+  }
+);
 
-  readDays();
-});
+//演習問題集用
+function Main(input) {
+  input = input.split("\n");
+  let N = Number(input[0]);
+  let A = input[1].split(" ")
+  let dp1=new Array( N + 1 ).fill(0);
+  let dp2=new Array( N + 1 ).fill(0);;
+  
+  Power(1);
+  
+  function Power(i) {
+  if (i <= N) {
+      dp1[i] = dp2[i - 1] + Number(A[i - 1]);
+      dp2[i] = Math.max(dp1[i - 1], dp2[i - 1]);
+      Power(i + 1);
+  } else {
+    console.log(Math.max(dp1[N], dp2[N]));
+  }
+}
+
+}
